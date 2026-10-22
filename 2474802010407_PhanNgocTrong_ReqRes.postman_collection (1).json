@@ -1,0 +1,337 @@
+{
+  "info": {
+    "_postman_id": "e003a394-c975-4f55-937d-53f0656c4188",
+    "name": "2474802010407_PhanNgocTrong_ReqRes",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59134641",
+    "_collection_link": "https://go.postman.co/collection/59134641-e003a394-c975-4f55-937d-53f0656c4188?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "positive_cases",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Check name and job in response\", function () {\r\n    var jsonData = pm.response.json();\r\n    // Kiểm tra trực tiếp với chuỗi bạn đã nhập ở Body\r\n    pm.expect(jsonData.name).to.eql(\"trong\");\r\n    pm.expect(jsonData.job).to.eql(\"IT\");\r\n});\r\n\r\npm.test(\"Extract and set userId\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.environment.set(\"userId\", jsonData.id);\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"trong\",\r\n    \"job\": \"IT\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Single User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Kiểm tra Status code là 200\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Kiểm tra trường data.id bằng 2 và kiểm tra data.email chứa đuôi @reqres.in\r\npm.test(\"Validate data.id is 2 and email contains @reqres.in\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.data.id).to.eql(2);\r\n    pm.expect(jsonData.data.email).to.include(\"@reqres.in\");\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Kiểm tra Status code là 200\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Kiểm tra trường updatedAt tồn tại trong response body\r\npm.test(\"Validate updatedAt field exists\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData).to.have.property('updatedAt');\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"An Nguyen Updated\",\r\n    \"job\": \"QA Manager\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Kiểm tra Status code là 204 (No Content)\r\npm.test(\"Status code is 204\", function () {\r\n    pm.response.to.have.status(204);\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "url": {
+              "raw": "https://reqres.in/api/users/2",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative_Cases",
+      "item": [
+        {
+          "name": "Register Unsuccessful",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Kiểm tra Status code là 400 (Bad Request)\r\npm.test(\"Status code is 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\n// Kiểm tra response body trả về đúng thông báo lỗi thực tế của API\r\npm.test(\"Validate error message\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.error).to.eql(\"Note: Only defined users succeed registration\");\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"sydney@fife\",\"password\":\"password123\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/register",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Unsuccessful",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Kiểm tra Status code là 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Kiểm tra thông báo lỗi thiếu thông tin đăng nhập\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.error).to.eql(\"Missing email or username\");\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/login",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Kiểm tra Status code là 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Kiểm tra body trả về là object rỗng\", function () {\r\n    var responseText = pm.response.text();\r\n    pm.expect(responseText).to.eql(\"{}\");\r\n});\r\n\r\n// Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms\r\npm.test(\"Response time is less than 800ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(800);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "reqres_7ce811c0881f49ea963687929232399a"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/users/23",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "users",
+                "23"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
