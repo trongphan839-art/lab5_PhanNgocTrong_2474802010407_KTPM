@@ -25,11 +25,11 @@ jobs:
           npm install -g newman
           npm install -g newman-reporter-htmlextra
 
-      # 4. Thực thi tập lệnh kiểm thử tự động hướng dữ liệu với Newman
+      # 4. Thực thi tập lệnh kiểm thử tự động hướng dữ liệu với Newman (với tên file chính xác)
       - name: Run Postman Collection via Newman
         run: |
-          newman run ReqRes_Collection.json \
-            -e ReqRes_Environment.json \
+          newman run 2474802010407_PhanNgocTrong_ReqRes.postman_collection.json \
+            -e 2474802010407_PhanNgocTrong_ReqRes_Env.postman_environment.json \
             -d users.csv \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export report.html
