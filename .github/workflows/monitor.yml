@@ -1,0 +1,47 @@
+name: API Performance & Availability Monitoring
+
+on:
+  schedule:
+    # Chạy tự động mỗi giờ
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    # Cho phép kích hoạt thủ công trên giao diện GitHub Actions
+
+jobs:
+  monitor-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check API Availability and Response Time
+        run: |
+          echo "Bắt đầu kiểm tra endpoint: https://reqres.in/api/users?page=1"
+          
+          # Đo thời gian phản hồi và lấy HTTP status code bằng curl
+          RESPONSE=$(curl -s -o response.json -w "%{http_code} %{time_total}" "https://reqres.in/api/users?page=1")
+          
+          HTTP_CODE=$(echo $RESPONSE | awk '{print $1}')
+          TIME_TOTAL=$(echo $RESPONSE | awk '{print $2}')
+          
+          # Chuyển đổi thời gian sang mili-giây (ms)
+          TIME_MS=$(awk "BEGIN {print $TIME_TOTAL * 1000}")
+          
+          echo "HTTP Status Code nhận được: $HTTP_CODE"
+          echo "Thời gian phản hồi (Response Time): ${TIME_MS}ms"
+          
+          # Kiểm tra tính sẵn sàng (Availability): Status Code phải là 200
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::error::Lỗi tính sẵn sàng! Status code không phải là 200 (Thực tế: $HTTP_CODE)"
+            exit 1
+          fi
+          
+          # Kiểm tra SLA / Performance: Thời gian phản hồi phải dưới 800ms
+          IS_BELOW=$(awk "BEGIN {print ($TIME_MS < 800) ? 1 : 0}")
+          if [ "$IS_BELOW" -eq 0 ]; then
+            echo "::error::Lỗi hiệu năng (SLA)! Thời gian phản hồi vượt quá 800ms (${TIME_MS}ms)"
+            exit 1
+          fi
+          
+          echo "Thành công! API hoạt động ổn định, sẵn sàng và đáp ứng chuẩn SLA."
